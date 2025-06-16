@@ -1,0 +1,70 @@
+local TweenService = game:GetService("TweenService")
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+
+local Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+Players.LocalPlayer.CharacterAdded:Connect(function(char)
+    Character = char
+    Humanoid = char:WaitForChild("Humanoid")
+end)
+
+local function GetCoinContainer()
+    for _, v in Workspace:GetChildren() do
+        local CoinContainer = v:FindFirstChild("CoinContainer")
+        if CoinContainer then
+            return CoinContainer
+        end
+    end
+end
+
+
+local attemptedCoins = {}
+
+local function GetCoin()
+    local CoinContainer = GetCoinContainer()
+    if CoinContainer then
+        local range, bestCoin = math.huge
+        for _, v in CoinContainer:GetChildren() do
+            if v:FindFirstChild("TouchInterest") and not attemptedCoins[v] then
+                local Magnitude = (Character:GetPivot().Position - v.Position).Magnitude
+                if Magnitude < range then
+                    range, bestCoin = Magnitude, v
+                end
+            end
+        end
+        return range, bestCoin
+    end
+end
+
+local range, coin, tween
+
+Workspace.DescendantRemoving:Connect(function(descendant)
+    if descendant == coin or descendant.Parent == coin then
+        if tween then
+            tween:Cancel()
+            tween = nil
+        end
+        attemptedCoins[coin] = nil  
+        coin = nil
+    end
+end)
+
+while task.wait() do
+    if Character then
+        range, coin = GetCoin()
+        if coin then
+            attemptedCoins[coin] = true 
+            tween = TweenService:Create(
+                Character.PrimaryPart,
+                TweenInfo.new(range / Humanoid.WalkSpeed),
+                {CFrame = coin.CFrame}
+            )
+            tween:Play()
+            tween.Completed:Wait()
+            tween = nil
+        else
+            attemptedCoins = {}
+        end
+    end
+end
