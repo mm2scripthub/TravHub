@@ -23,8 +23,6 @@ WindUI:Popup({
 })
 repeat task.wait() until Confirmed
 
-local gui = loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
-
 -- Main window setup
 local Window = WindUI:CreateWindow({
     Title = "@l1unaahh MM2",
@@ -629,3 +627,4 @@ AboutTab:Button({
         copyWithNotify("https://www.paypal.com/paypalme/openda19", "PayPal Link")
     end
 })
+loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/MurderMystery2'))()
