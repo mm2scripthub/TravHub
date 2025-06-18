@@ -6,7 +6,6 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 local Confirmed = false
 local LocalPlayer = Players.LocalPlayer
-local gui = loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
 
 -- Optimized Popup System
 WindUI:Popup({
@@ -23,6 +22,8 @@ WindUI:Popup({
     }
 })
 repeat task.wait() until Confirmed
+
+local gui = loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
 
 -- Main window setup
 local Window = WindUI:CreateWindow({
