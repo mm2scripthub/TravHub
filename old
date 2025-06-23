@@ -1,0 +1,630 @@
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua", true))()
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local Workspace = game:GetService("Workspace")
+local Confirmed = false
+local LocalPlayer = Players.LocalPlayer
+
+-- Optimized Popup System
+WindUI:Popup({
+    Title = "TravHub",
+    Icon = "info",
+    Content = "Welcome to @TravHub MM2\nPress Continue to proceed",
+    Buttons = {
+        {
+            Title = "Continue",
+            Icon = "arrow-right",
+            Callback = function() Confirmed = true end,
+            Variant = "Primary"
+        }
+    }
+})
+repeat task.wait() until Confirmed
+
+-- Main window setup
+local Window = WindUI:CreateWindow({
+    Title = "@l1unaahh MM2",
+    Icon = "knife",
+    Author = "@TravHub",
+    Folder = "murdermystery2",
+    Size = UDim2.fromOffset(600, 480),
+    Transparent = true,
+    Theme = "Dark",
+    UserEnabled = true,
+    SideBarWidth = 200,
+    HasOutline = true
+})
+
+-- Home Tab
+local HomeTab = Window:Tab({
+    Title = "Home",
+    Icon = "target",
+    Desc = "Main Features"
+})
+
+-- Shoot Murder op lol
+local shootMurderEnabled = false
+local shootMurderGUI
+
+HomeTab:Button({
+    Title = "Shoot Murder",
+    Desc = "Toggle Shoot Murder Tools",
+    Icon = "crosshair",
+    Callback = function()
+        shootMurderEnabled = not shootMurderEnabled
+        if shootMurderEnabled then
+            -- Create GUI
+            shootMurderGUI = Instance.new("ScreenGui")
+            shootMurderGUI.Name = "ShootMurderGUI"
+            shootMurderGUI.ResetOnSpawn = false
+            shootMurderGUI.Parent = LocalPlayer:WaitForChild("PlayerGui")
+            
+            local MainFrame = Instance.new("Frame")
+            MainFrame.Size = UDim2.new(0, 140, 0, 130)
+            MainFrame.Position = UDim2.new(0.5, -70, 0.7, -65)
+            MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+            MainFrame.BackgroundTransparency = 0.2
+            MainFrame.BorderSizePixel = 0
+            MainFrame.Parent = shootMurderGUI
+            
+            Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
+            
+            local TitleLabel = Instance.new("TextLabel")
+            TitleLabel.Text = "SHOOT MURDER"
+            TitleLabel.Size = UDim2.new(1, 0, 0, 25)
+            TitleLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+            TitleLabel.Font = Enum.Font.GothamBold
+            TitleLabel.TextSize = 14
+            TitleLabel.Parent = MainFrame
+            
+            local ShootButton = Instance.new("TextButton")
+            ShootButton.Text = "SHOOT"
+            ShootButton.Size = UDim2.new(0.8, 0, 0, 40)
+            ShootButton.Position = UDim2.new(0.1, 0, 0, 30)
+            ShootButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+            ShootButton.TextColor3 = Color3.new(1,1,1)
+            ShootButton.Font = Enum.Font.GothamBold
+            ShootButton.TextSize = 14
+            ShootButton.AutoButtonColor = false
+            ShootButton.Parent = MainFrame
+            
+            Instance.new("UICorner", ShootButton).CornerRadius = UDim.new(0, 8)
+            
+            local Toggle = Instance.new("TextButton")
+            Toggle.Text = "Auto Get Gun [OFF]"
+            Toggle.Size = UDim2.new(0.8, 0, 0, 25)
+            Toggle.Position = UDim2.new(0.1, 0, 0, 80)
+            Toggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            Toggle.TextColor3 = Color3.new(1,1,1)
+            Toggle.Font = Enum.Font.Gotham
+            Toggle.TextSize = 12
+            Toggle.Parent = MainFrame
+            
+            Instance.new("UICorner", Toggle).CornerRadius = UDim.new(0, 8)
+            
+            -- Dragging System
+            local dragging, dragStart, startPos
+            MainFrame.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.Touch then
+                    dragging = true
+                    dragStart = input.Position
+                    startPos = MainFrame.Position
+                    TweenService:Create(MainFrame, TweenInfo.new(0.1), {BackgroundTransparency = 0.15}):Play()
+                    input.Changed:Connect(function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            dragging = false
+                            TweenService:Create(MainFrame, TweenInfo.new(0.2), {BackgroundTransparency = 0.2}):Play()
+                        end
+                    end)
+                end
+            end)
+            
+            UserInputService.InputChanged:Connect(function(input)
+                if dragging and input.UserInputType == Enum.UserInputType.Touch then
+                    local delta = input.Position - dragStart
+                    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+                end
+            end)
+            
+            -- Hover Effects
+            ShootButton.MouseEnter:Connect(function()
+                TweenService:Create(ShootButton, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(200, 50, 50)}):Play()
+            end)
+            ShootButton.MouseLeave:Connect(function()
+                TweenService:Create(ShootButton, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(180, 40, 40)}):Play()
+            end)
+            
+            -- Auto Get Gun skid
+            local AutoGetGun = { Enabled = false, CollectDistance = 5000 }
+            local lastTeleport = 0
+            
+            local function isMurderer()
+                local char = LocalPlayer.Character
+                return char and (char:FindFirstChild("Knife") or char:FindFirstChild("Gun"))
+            end
+            
+            local function getNearestGun()
+                local char = LocalPlayer.Character
+                local root = char and char:FindFirstChild("HumanoidRootPart")
+                if not root then return end
+                local closestGun, closestDist = nil, AutoGetGun.CollectDistance
+                for _, item in ipairs(Workspace:GetChildren()) do
+                    if item.Name == "GunDrop" then
+                        local distance = (root.Position - item.Position).Magnitude
+                        if distance < closestDist then
+                            closestGun, closestDist = item, distance
+                        end
+                    end
+                end
+                return closestGun
+            end
+            
+            local function teleportToGunAndBack()
+                if tick() - lastTeleport < 1 then return end
+                lastTeleport = tick()
+                if isMurderer() then return end
+                local char = LocalPlayer.Character
+                local root = char and char:FindFirstChild("HumanoidRootPart")
+                local gun = getNearestGun()
+                if not gun then return end
+                
+                local originalCFrame = root.CFrame
+                local tween = TweenService:Create(root, TweenInfo.new(0.25), {CFrame = CFrame.new(gun.Position + Vector3.new(0, 2, 0))})
+                tween:Play()
+                tween.Completed:Wait()
+                
+                -- Verify gun collection
+                local startTime = tick()
+                while tick() - startTime < 3 do
+                    if char:FindFirstChild("Gun") then
+                        return
+                    end
+                    task.wait(0.1)
+                end
+                
+                -- Return if failed
+                TweenService:Create(root, TweenInfo.new(0.25), {CFrame = originalCFrame}):Play()
+            end
+            
+            Toggle.MouseButton1Click:Connect(function()
+                AutoGetGun.Enabled = not AutoGetGun.Enabled
+                Toggle.Text = AutoGetGun.Enabled and "Auto Get Gun [ON]" or "Auto Get Gun [OFF]"
+                if AutoGetGun.Enabled then
+                    task.spawn(function()
+                        while AutoGetGun.Enabled and task.wait(1) do
+                            teleportToGunAndBack()
+                        end
+                    end)
+                end
+            end)
+            
+            -- Shoot ahh button
+            ShootButton.MouseButton1Click:Connect(function()
+                local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                local backpack = LocalPlayer:WaitForChild("Backpack")
+                local gun = backpack:FindFirstChild("Gun") or char:FindFirstChild("Gun")
+                
+                if not gun then
+                    ShootButton.Text = "NO GUN"
+                    ShootButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+                    task.wait(1)
+                    ShootButton.Text = "SHOOT"
+                    ShootButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+                    return
+                end
+                
+                char:WaitForChild("Humanoid"):EquipTool(gun)
+                task.wait(0.2)
+                
+                local target = nil
+                for _, player in ipairs(Players:GetPlayers()) do
+                    if player ~= LocalPlayer and player.Character then
+                        local knife = player.Character:FindFirstChild("Knife") or player.Backpack:FindFirstChild("Knife")
+                        if knife then
+                            target = player
+                            break
+                        end
+                    end
+                end
+                
+                if not target or not target.Character then
+                    ShootButton.Text = "NO TARGET"
+                    ShootButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+                    task.wait(1)
+                    ShootButton.Text = "SHOOT"
+                    ShootButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+                    return
+                end
+                
+                local targetRoot = target.Character:FindFirstChild("HumanoidRootPart")
+                if not targetRoot then return end
+                
+                local leadPos = targetRoot.Position + (targetRoot.Velocity * ((targetRoot.Position - char.HumanoidRootPart.Position).Magnitude / 300))
+                
+                local success, err = pcall(function()
+                    workspace[char.Name].Gun.KnifeLocal.CreateBeam.RemoteFunction:InvokeServer(1, leadPos, "AH2")
+                end)
+                
+                if success then
+                    ShootButton.Text = "SHOT FIRED"
+                    ShootButton.BackgroundColor3 = Color3.fromRGB(40, 180, 40)
+                else
+                    ShootButton.Text = "FAILED"
+                    ShootButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+                end
+                
+                task.wait(1)
+                ShootButton.Text = "SHOOT"
+                ShootButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+            end)
+        else
+            if shootMurderGUI then
+                shootMurderGUI:Destroy()
+            end
+        end
+    end
+})
+
+-- AutoFarm op Tab lol
+local AutoFarmTab = Window:Tab({
+    Title = "AutoFarm",
+    Icon = "coins",
+    Desc = "Resource Farming"
+})
+
+AutoFarmTab:Button({
+    Title = "Farm Coins",
+    Desc = "Start farming coins",
+    Icon = "coins",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/l1unaahh/murdermystery2/refs/heads/main/coin"))()
+    end
+})
+
+AutoFarmTab:Button({
+    Title = "Farm Eggs",
+    Desc = "Start farming eggs",
+    Icon = "egg",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/l1unaahh/murdermystery2/refs/heads/main/egg"))()
+    end
+})
+
+AutoFarmTab:Button({
+    Title = "Farm Both",
+    Desc = "Start farming coins and eggs",
+    Icon = "database",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/l1unaahh/murdermystery2/refs/heads/main/coinegg"))()
+    end
+})
+
+-- Optimized ESP Tab
+local ESPTab = Window:Tab({
+    Title = "ESP",
+    Icon = "eye",
+    Desc = "Player Highlighting"
+})
+
+local ESPEnabled = false
+local highlights = {}
+local espConnections = {}
+
+local function hasTool(player, toolName)
+    return (player.Backpack:FindFirstChild(toolName) or player.Character:FindFirstChild(toolName)) and true or false
+end
+
+local function updateESP(player)
+    if player == LocalPlayer then return end
+    local highlight = highlights[player]
+    
+    if not ESPEnabled then
+        if highlight then
+            highlight:Destroy()
+            highlights[player] = nil
+        end
+        return
+    end
+    
+    local character = player.Character
+    if not character then return end
+    
+    -- Create or update highlight
+    if not highlight or not highlight:IsDescendantOf(game) then
+        highlight = Instance.new("Highlight")
+        highlight.Adornee = character
+        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        highlight.FillTransparency = 0.5
+        highlight.OutlineTransparency = 0
+        highlight.Parent = character
+        highlights[player] = highlight
+    end
+    
+    -- Update colors
+    local hasKnife = hasTool(player, "Knife")
+    local hasGun = hasTool(player, "Gun")
+    
+    if hasKnife then
+        highlight.FillColor = Color3.fromRGB(255, 0, 0)
+        highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
+    elseif hasGun then
+        highlight.FillColor = Color3.fromRGB(0, 0, 255)
+        highlight.OutlineColor = Color3.fromRGB(0, 0, 255)
+    else
+        highlight.FillColor = Color3.fromRGB(0, 255, 0)
+        highlight.OutlineColor = Color3.fromRGB(0, 255, 0)
+    end
+end
+
+local function setupPlayer(player)
+    if player == LocalPlayer then return end
+    
+    -- Character changes
+    player.CharacterAdded:Connect(function()
+        task.wait(1)
+        updateESP(player)
+    end)
+    
+    -- Tool changes
+    local function toolChanged()
+        task.wait(0.25)
+        updateESP(player)
+    end
+    
+    espConnections[player] = {
+        player.Backpack.ChildAdded:Connect(toolChanged),
+        player.Backpack.ChildRemoved:Connect(toolChanged)
+    }
+    
+    if player.Character then
+        espConnections[player][#espConnections[player]+1] = player.Character.ChildAdded:Connect(toolChanged)
+        espConnections[player][#espConnections[player]+1] = player.Character.ChildRemoved:Connect(toolChanged)
+    end
+end
+
+ESPTab:Toggle({
+    Title = "Enable ESP",
+    Default = false,
+    Callback = function(state)
+        ESPEnabled = state
+        if state then
+            for _, player in ipairs(Players:GetPlayers()) do
+                if player ~= LocalPlayer then
+                    setupPlayer(player)
+                    updateESP(player)
+                end
+            end
+        else
+            -- Cleanup
+            for player, highlight in pairs(highlights) do
+                highlight:Destroy()
+                highlights[player] = nil
+            end
+            for player, connections in pairs(espConnections) do
+                for _, conn in ipairs(connections) do
+                    conn:Disconnect()
+                end
+                espConnections[player] = nil
+            end
+        end
+    end
+})
+
+Players.PlayerAdded:Connect(function(player)
+    if ESPEnabled and player ~= LocalPlayer then
+        setupPlayer(player)
+        updateESP(player)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    if highlights[player] then
+        highlights[player]:Destroy()
+        highlights[player] = nil
+    end
+    if espConnections[player] then
+        for _, conn in ipairs(espConnections[player]) do
+            conn:Disconnect()
+        end
+        espConnections[player] = nil
+    end
+end)
+
+-- Misc shit tab
+local MiscTab = Window:Tab({
+    Title = "Misc",
+    Icon = "settings",
+    Desc = "Utilities"
+})
+
+-- FullBright bru
+local FullbrightEnabled = false
+local originalLighting = {}
+
+MiscTab:Toggle({
+    Title = "FullBright",
+    Default = false,
+    Callback = function(state)
+        FullbrightEnabled = state
+        local Lighting = game:GetService("Lighting")
+        if state then
+            originalLighting = {
+                Brightness = Lighting.Brightness,
+                ClockTime = Lighting.ClockTime,
+                FogEnd = Lighting.FogEnd,
+                GlobalShadows = Lighting.GlobalShadows,
+                OutdoorAmbient = Lighting.OutdoorAmbient
+            }
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.GlobalShadows = false
+            Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+        else
+            Lighting.Brightness = originalLighting.Brightness or 1
+            Lighting.ClockTime = originalLighting.ClockTime or 12
+            Lighting.FogEnd = originalLighting.FogEnd or 1000
+            Lighting.GlobalShadows = originalLighting.GlobalShadows or true
+            Lighting.OutdoorAmbient = originalLighting.OutdoorAmbient or Color3.fromRGB(128, 128, 128)
+        end
+    end
+})
+
+-- Infinite Jump ass
+local flyConnection = nil
+
+MiscTab:Toggle({
+    Title = "Infinite Jump",
+    Default = false,
+    Callback = function(state)
+        if state then
+            flyConnection = UserInputService.JumpRequest:Connect(function()
+                local char = LocalPlayer.Character
+                if char then
+                    local humanoid = char:FindFirstChildOfClass("Humanoid")
+                    if humanoid then
+                        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                    end
+                end
+            end)
+        else
+            if flyConnection then
+                flyConnection:Disconnect()
+                flyConnection = nil
+            end
+        end
+    end
+})
+
+-- WalkSpeed ass
+local originalWalkSpeed = 16
+
+MiscTab:Slider({
+    Title = "WalkSpeed",
+    Min = 16,
+    Max = 200,
+    Default = 16,
+    Callback = function(value)
+        local char = LocalPlayer.Character
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = value
+            end
+        end
+    end
+})
+
+-- Fly shit
+local FLYING = false
+local iyflyspeed = 200
+local flyBV = nil
+
+local function sFLY()
+    local char = LocalPlayer.Character
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+    if not root or not humanoid then return end
+    
+    FLYING = true
+    humanoid.PlatformStand = true
+    
+    local BG = Instance.new("BodyGyro")
+    BG.Parent = root
+    BG.P = 9e4
+    BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+    BG.cframe = root.CFrame
+    
+    flyBV = Instance.new("BodyVelocity")
+    flyBV.Parent = root
+    flyBV.velocity = Vector3.new(0, 0, 0)
+    flyBV.maxForce = Vector3.new(9e9, 9e9, 9e9)
+    
+    UserInputService.InputBegan:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.W then
+            flyBV.velocity = root.CFrame.lookVector * iyflyspeed
+        elseif input.KeyCode == Enum.KeyCode.S then
+            flyBV.velocity = -root.CFrame.lookVector * iyflyspeed
+        elseif input.KeyCode == Enum.KeyCode.A then
+            flyBV.velocity = -root.CFrame.rightVector * iyflyspeed
+        elseif input.KeyCode == Enum.KeyCode.D then
+            flyBV.velocity = root.CFrame.rightVector * iyflyspeed
+        end
+    end)
+    
+    RunService.Heartbeat:Connect(function()
+        if not FLYING then return end
+        BG.cframe = CFrame.new(root.Position, Workspace.CurrentCamera.CFrame.p)
+    end)
+end
+
+local function NOFLY()
+    FLYING = false
+    local char = LocalPlayer.Character
+    if char then
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.PlatformStand = false
+        end
+        for _, v in pairs(char:GetDescendants()) do
+            if v:IsA("BodyGyro") or v:IsA("BodyVelocity") then
+                v:Destroy()
+            end
+        end
+    end
+    flyBV = nil
+end
+
+MiscTab:Toggle({
+    Title = "Fly",
+    Default = false,
+    Callback = function(state)
+        if state then
+            sFLY()
+        else
+            NOFLY()
+            iyflyspeed = 200 -- Reset speed
+        end
+    end
+})
+
+MiscTab:Slider({
+    Title = "Fly Speed",
+    Min = 50,
+    Max = 500,
+    Default = 200,
+    Callback = function(value)
+        iyflyspeed = value
+        if flyBV then
+            flyBV.Velocity = flyBV.Velocity.Unit * iyflyspeed
+        end
+    end
+})
+
+-- About Tab
+local AboutTab = Window:Tab({
+    Title = "About",
+    Icon = "info",
+    Desc = "Support & Credits"
+})
+
+local function copyWithNotify(text, title)
+    setclipboard(text)
+    WindUI:Notify({
+        Title = title,
+        Content = "Copied to clipboard!",
+        Icon = "check",
+        Duration = 5
+    })
+end
+
+AboutTab:Button({
+    Title = "Support Me (PayPal)",
+    Icon = "dollar-sign",
+    Callback = function()
+        copyWithNotify("https://www.paypal.com/paypalme/openda19", "PayPal Link")
+    end
+})
+loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
