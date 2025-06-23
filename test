@@ -547,7 +547,7 @@ do
 						localRoot.CFrame = targetRoot.CFrame;
 						WindUI:Notify({
 							Title = "Teleport",
-							Content = "Successfully teleported to шерифу "   .. Sheriff ,
+							Content = "Successfully teleported to the Sheriff "   .. Sheriff ,
 							Icon = "check-circle",
 							Duration = 3
 						});
@@ -583,7 +583,7 @@ do
 						localRoot.CFrame = targetRoot.CFrame;
 						WindUI:Notify({
 							Title = "Teleport",
-							Content = "Successfully teleported to убийце "   .. Murder ,
+							Content = "Successfully teleported to the Murderer "   .. Murder ,
 							Icon = "check-circle",
 							Duration = 3
 						});
@@ -1958,7 +1958,7 @@ do
 	});
 	local AutoInject = {
 		Enabled = false,
-		ScriptURL = "https:" --https://raw.githubusercontent.com/Snowt-Team/SNT-HUB/refs/heads/main/MM2.txt is what its suppsoed to be
+		ScriptURL = "https:" --https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/MurderMystery2 is what its suppsoed to be
 	};
 	Tabs.SettingsTab:Toggle({
 		Title = "Auto Inject on Rejoin/Hop",
@@ -2020,33 +2020,33 @@ do
 				loadstring(game:HttpGet(AutoInject.ScriptURL))();
 				WindUI:Notify({
 					Title = "Manual Inject",
-					Content = "Скрипт успешно перезагружен!",
+					Content = "Script successfully reloaded!",
 					Duration = 3
 				});
 			end);
 		end
 	});
 	Tabs.SocialsTab:Paragraph({
-		Title = gradient("TravHub", Color3.fromHex("#001e80"), Color3.fromHex("#16f2d9")),
+		Title = gradient("xYSF", Color3.fromHex("#001e80"), Color3.fromHex("#16f2d9")),
 		Desc = "My socials",
 		Image = "bird",
 		Color = "Green",
 		Buttons = {
 			{
 				Icon = "circle",
-				Title = "TG Channel",
+				Title = "YT - @xYSF",
 				Callback = function()
-					if pcall(setclipboard, "t.me/supreme_scripts") then
+					if pcall(setclipboard, "https://www.youtube.com/@xysf") then
 						WindUI:Notify({
-							Title = "Скопировано!",
-							Content = "Ссылка TravHub скопирована в буфер обмена.",
+							Title = "Copied!",
+							Content = "YT link copied to clipboard.",
 							Duration = 3,
 							Icon = "check-fill"
 						});
 					else
 						WindUI:Notify({
-							Title = "Error копирования",
-							Content = "Не удалось скопировать ссылку. Возможно, функция setclipboard не доступна.",
+							Title = "Copy Error",
+							Content = "Failed to copy link. Clipboard function might not be available.",
 							Duration = 5,
 							Icon = "x-fill"
 						});
@@ -2056,26 +2056,26 @@ do
 		}
 	});
 	Tabs.SocialsTab:Paragraph({
-		Title = gradient("Mirrozz", Color3.fromHex("#ffffff"), Color3.fromHex("#363636")),
-		Desc = "https://www.paypal.me/@openda19",
+		Title = gradient("PayPal", Color3.fromHex("#ffffff"), Color3.fromHex("#363636")),
+		Desc = "@openda19",
 		Image = "bird",
 		Color = "Green",
 		Buttons = {
 			{
-				Title = "TG Channel",
+				Title = "PayPal - @openda19",
 				Icon = "circle",
 				Callback = function()
-					if pcall(setclipboard, "t.me/mirrozzscript") then
+					if pcall(setclipboard, "https://www.paypal.me/@openda19") then
 						WindUI:Notify({
-							Title = "Скопировано!",
-							Content = "Ссылка Mirrozz скопирована в буфер обмена.",
+							Title = "Copied!",
+							Content = "PayPal link copied to clipboard.",
 							Duration = 3,
 							Icon = "check-fill"
 						});
 					else
 						WindUI:Notify({
-							Title = "Error копирования",
-							Content = "Не удалось скопировать ссылку. Возможно, функция setclipboard не доступна.",
+							Title = "Copy Error",
+							Content = "Failed to copy link. Clipboard function might not be available.",
 							Duration = 5,
 							Icon = "x-fill"
 						});
@@ -2126,7 +2126,7 @@ do
     • Fix bugs
     • New esp functions [tracers; names; highlights and more!]
     • Grab Gun Variables [Tp to gun; Gun tp to you]
-   The date of update: 25.05.2025!
+   The date of update: SOON!
 ]]
 	});
 	local TeleportService = game:GetService("TeleportService");
@@ -2379,8 +2379,8 @@ do
 			});
 			WindUI:SetTheme(currentThemeName);
 			WindUI:Notify({
-				Title = "Тема обновлена",
-				Content = "Новая тема '"   .. currentThemeName   .. "' применена!" ,
+				Title = "Topic updated",
+				Content = "New topic '"   .. currentThemeName   .. "' applied!" ,
 				Duration = 3,
 				Icon = "check-circle"
 			});
