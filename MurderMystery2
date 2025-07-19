@@ -896,7 +896,7 @@ do
 		end
 	end
 	Tabs.AutoFarm:Section({
-		Title = gradient("Coin Farming", Color3.fromHex("#FFD700"), Color3.fromHex("#FFA500"))
+		Title = gradient("Coin and Beach Ball Farming", Color3.fromHex("#FFD700"), Color3.fromHex("#ADD8E6"))
 	});
 	Tabs.AutoFarm:Dropdown({
 		Title = "Movement Mode",
