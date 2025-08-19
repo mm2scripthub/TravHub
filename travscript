@@ -1,3 +1,14 @@
+local script
+local ok, res = pcall(function()
+    return loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
+end)
+if ok then
+    script = res
+    print("script loaded fine")
+else
+    warn("script failed: "..tostring(res))
+end
+
 do
 	local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))();
 	local Players = game:GetService("Players");
@@ -2416,5 +2427,3 @@ end
 		end
 	});
 end
-
-loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
