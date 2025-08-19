@@ -2416,9 +2416,3 @@ end
 		end
 	});
 end
-
-local function farm()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
-end
-
-task.spawn(farm)
