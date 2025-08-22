@@ -1,9 +1,9 @@
-local function script()
+local function ahh()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
 end
-local function gui()
+local function script()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/travscript'))()
 end
 
+task.spawn(ahh)
 task.spawn(script)
-task.spawn(gui)
