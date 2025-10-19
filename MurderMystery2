@@ -8,6 +8,6 @@ end
 
 task.spawn(script)
 
-task.wait(3)
+task.wait(5)
 task.spawn(loadui)
 
