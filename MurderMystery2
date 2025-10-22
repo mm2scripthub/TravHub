@@ -1,5 +1,12 @@
 local function script()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/mainscript'))()
+    -- Check for specific executors using identifyexecutor
+    if identifyexecutor and (identifyexecutor() == "Xeno" or identifyexecutor() == "Solara" or identifyexecutor() == "Trigon" or identifyexecutor() == "Hydrogen" or identifyexecutor() == "Zenith" or identifyexecutor() == "Volcano" or identifyexecutor() == "Swift" or identifyexecutor() == "Potassium" or identifyexecutor() == "Seliware" or identifyexecutor() == "Velocity" or identifyexecutor() == "Cryptic") then
+        -- For Xeno or Solara executors
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
+    else
+        -- For other executors
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/mainscript'))()
+    end
 end
 
 local function loadui()
@@ -7,7 +14,5 @@ local function loadui()
 end
 
 task.spawn(script)
-
 task.wait(5)
 task.spawn(loadui)
-
