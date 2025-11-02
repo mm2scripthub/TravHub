@@ -1,6 +1,12 @@
 local function script()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
-    setclipboard("https://discord.gg/pNfrgHeede")
+    -- Check for specific executors using identifyexecutor
+    if identifyexecutor and (identifyexecutor() == "Delta" or identifyexecutor() == "Krnl") then
+        -- For Delta or Krnl executors
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/mainscript'))()
+    else
+        -- For other executors
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
+    end
 end
 
 local function loadui()
@@ -8,6 +14,5 @@ local function loadui()
 end
 
 task.spawn(script)
-
 task.wait(5)
 task.spawn(loadui)
