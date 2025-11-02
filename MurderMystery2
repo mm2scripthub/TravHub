@@ -1,5 +1,6 @@
 local function script()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
+    setclipboard("https://discord.gg/pNfrgHeede")
 end
 
 local function loadui()
@@ -10,4 +11,3 @@ task.spawn(script)
 
 task.wait(5)
 task.spawn(loadui)
-
