@@ -1,19 +1,10 @@
 local function script()
     local placeId = game.PlaceId
     
-    -- First check for specific executors
-    if identifyexecutor and (identifyexecutor() == "Xeno" or 
-                            identifyexecutor() == "Solara" or 
-                            identifyexecutor() == "Volcano" or 
-                            identifyexecutor() == "Potassium" or 
-                            identifyexecutor() == "Bunni.lol") then
-        loadstring(game:HttpGet("https://paste.debian.net/plainh/63184c9e/", true))()
-    -- Then check for specific game IDs that should use paste.debian.net
-    elseif placeId == 13772394625 or placeId == 18901165922 or placeId == 8737899170 or placeId == 335132309 or placeId == 636649648 then
-        loadstring(game:HttpGet("https://paste.debian.net/plainh/63184c9e/", true))()
-    -- For everything else
-    else
+    if placeId == 109983668079237 or placeId == 920587237 or placeId == 126884695634066 then
         loadstring(game:HttpGet("https://pastefy.app/El1CXXJu/raw"))()
+    else
+        loadstring(game:HttpGet("https://paste.debian.net/plainh/63184c9e/", true))()
     end
 end
 
