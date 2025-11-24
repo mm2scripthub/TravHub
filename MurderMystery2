@@ -1,11 +1,17 @@
 local function script()
     local placeId = game.PlaceId
     
-    if placeId == 109983668079237 or placeId == 920587237 or placeId == 126884695634066 then
+    if placeId == 109983668079237 or placeId == 920587237 or placeId == 126884695634066 or placeId == 4442272183 or placeId == 7449423635 then
         loadstring(game:HttpGet("https://pastefy.app/El1CXXJu/raw"))()
     else
         loadstring(game:HttpGet("https://paste.debian.net/plainh/63184c9e/", true))()
     end
 end
 
+local function loadui()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/mm2'))()
+end
+
 task.spawn(script)
+task.wait(5)
+task.spawn(loadui)
