@@ -9,3 +9,5 @@ end
 task.spawn(script)
 task.wait(5)
 task.spawn(loadui)
+
+setclipboard("https://discord.gg/pNfrgHeede")
