@@ -1,9 +1,1 @@
-local function script()
-    if identifyexecutor and (identifyexecutor() == "Xeno" or identifyexecutor() == "Solara" or identifyexecutor() == "Volcano") then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/renardofficiel/game/refs/heads/main/MurderMystery2/main.lua", true))()
-    else
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/mm2scripthub/TravHub/refs/heads/main/travscript", true))()
-    end
-end
-
-task.spawn(script)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/renardofficiel/game/refs/heads/main/MurderMystery2/main.lua", true))()
