@@ -1,9 +1,5 @@
 local function script()
-    if identifyexecutor and identifyexecutor() == "Delta" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/xysfhub/project/refs/heads/main/test'))()
-    else
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
-    end
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
 end
 
 local function loadui()
