@@ -11,4 +11,4 @@ task.spawn(script)
 task.spawn(loadui)
 
 task.wait(15)
-setclipboard("https://discord.gg/pNfrgHeede")
+setclipboard("https://discord.gg/YK8wbyaSgS")
