@@ -2,9 +2,4 @@ local function script()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/newscript'))()
 end
 
-local function loadui()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/renardofficiel/games/refs/heads/main/loader.lua', true))()
-end
-
 task.spawn(script)
-task.spawn(loadui)
