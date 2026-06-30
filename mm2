@@ -1,4 +1,3 @@
-
 local function script()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/mm2scripthub/mm2/refs/heads/main/test"))()
 end
@@ -8,4 +7,5 @@ local function loadui()
 end
 
 task.spawn(script)
+task.wait(5)
 task.spawn(loadui)
